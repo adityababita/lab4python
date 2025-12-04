@@ -1,5 +1,5 @@
 # WEATHER DATA VISUALIZER PROJECT
-# Vansh Viraj Bisht
+# aditya agrawal
 
 import pandas as pd
 import numpy as np
@@ -77,4 +77,5 @@ plt.close()
 
 # 3. Scatter plot - Humidity vs Temperature
 plt.figure(figsize=(8,5))
+
 plt
