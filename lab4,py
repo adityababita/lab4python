@@ -1,0 +1,80 @@
+# WEATHER DATA VISUALIZER PROJECT
+# Vansh Viraj Bisht
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# --------------------------------------------
+# Task 1: Load Data
+# --------------------------------------------
+df = pd.read_csv("weather.csv")
+
+print("Initial Data:")
+display(df.head())
+print(df.info())
+
+# --------------------------------------------
+# Task 2: Data Cleaning
+# --------------------------------------------
+
+# Convert date column to datetime
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+# Drop rows where date is missing
+df = df.dropna(subset=['date'])
+
+# Fill numeric missing values with mean
+num_cols = ['temperature', 'humidity', 'rainfall']
+for col in num_cols:
+    if col in df.columns:
+        df[col] = df[col].fillna(df[col].mean())
+
+print("\nAfter Cleaning:")
+display(df.head())
+
+# Save cleaned dataset
+df.to_csv("cleaned_weather.csv", index=False)
+
+# --------------------------------------------
+# Task 3: Statistical Analysis with NumPy
+# --------------------------------------------
+
+daily_mean = df['temperature'].mean()
+monthly_stats = df.groupby(df['date'].dt.month)['temperature'].mean()
+yearly_stats = df.groupby(df['date'].dt.year)['temperature'].mean()
+
+print("\nDaily Mean Temperature:", daily_mean)
+print("\nMonthly Temperature Means:")
+print(monthly_stats)
+
+print("\nYearly Temperature Means:")
+print(yearly_stats)
+
+# --------------------------------------------
+# Task 4: Visualization
+# --------------------------------------------
+
+# 1. Line chart - Daily temperature
+plt.figure(figsize=(10,5))
+plt.plot(df['date'], df['temperature'])
+plt.title("Daily Temperature Trend")
+plt.xlabel("Date")
+plt.ylabel("Temperature")
+plt.savefig("daily_temp.png")
+plt.close()
+
+# 2. Bar chart - Monthly rainfall
+monthly_rain = df.groupby(df['date'].dt.month)['rainfall'].sum()
+
+plt.figure(figsize=(10,5))
+plt.bar(monthly_rain.index, monthly_rain)
+plt.title("Monthly Rainfall Totals")
+plt.xlabel("Month")
+plt.ylabel("Rainfall (mm)")
+plt.savefig("monthly_rainfall.png")
+plt.close()
+
+# 3. Scatter plot - Humidity vs Temperature
+plt.figure(figsize=(8,5))
+plt
